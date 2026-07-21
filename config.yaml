@@ -1,0 +1,69 @@
+# 니트족 콘텐츠 수집기 설정
+
+# 관련도 필터 임계값 (0~100)
+relevance_threshold: 30
+
+# RSS 피드 소스 목록
+feeds:
+  # Google News RSS – 한국어 검색 쿼리
+  - name: "Google News – 니트족"
+    url: "https://news.google.com/rss/search?q=%EB%8B%88%ED%8A%B8%EC%A1%B1&hl=ko&gl=KR&ceid=KR:ko"
+  - name: "Google News – NEET 청년"
+    url: "https://news.google.com/rss/search?q=NEET+%EC%B2%AD%EB%85%84&hl=ko&gl=KR&ceid=KR:ko"
+  - name: "Google News – 청년 무업자"
+    url: "https://news.google.com/rss/search?q=%EC%B2%AD%EB%85%84+%EB%AC%B4%EC%97%85%EC%9E%90&hl=ko&gl=KR&ceid=KR:ko"
+  - name: "Google News – 구직단념청년"
+    url: "https://news.google.com/rss/search?q=%EA%B5%AC%EC%A7%81%EB%8B%A8%EB%85%90%EC%B2%AD%EB%85%84&hl=ko&gl=KR&ceid=KR:ko"
+  - name: "Google News – 쉬었음 청년"
+    url: "https://news.google.com/rss/search?q=%EC%89%AC%EC%97%88%EC%9D%8C+%EC%B2%AD%EB%85%84&hl=ko&gl=KR&ceid=KR:ko"
+  - name: "Google News – 은둔 청년"
+    url: "https://news.google.com/rss/search?q=%EC%9D%80%EB%91%94+%EC%B2%AD%EB%85%84&hl=ko&gl=KR&ceid=KR:ko"
+  - name: "Google News – 청년 실업"
+    url: "https://news.google.com/rss/search?q=%EC%B2%AD%EB%85%84+%EC%8B%A4%EC%97%85&hl=ko&gl=KR&ceid=KR:ko"
+
+# 키워드 설정
+keywords:
+  # 강한 키워드 (높은 점수)
+  strong:
+    - "니트족"
+    - "청년 니트"
+    - "NEET"
+    - "청년 무업자"
+    - "구직 단념 청년"
+    - "구직단념청년"
+  # 보조 키워드 (낮은 점수)
+  weak:
+    - "쉬었음 청년"
+    - "은둔 청년"
+    - "고립 청년"
+    - "히키코모리"
+    - "청년 실업"
+    - "장기 미취업"
+    - "청년 취업"
+  # 제외/감점 키워드
+  exclude:
+    - "니트웨어"
+    - "니트 패션"
+    - "스웨터"
+    - "가디건"
+    - "뜨개질"
+    - "원사"
+
+# HTTP 요청 설정
+http:
+  timeout: 20
+  user_agent: "NeetContentCollector/0.1 (github.com/nuga-cracker/neet-content-collector; educational research)"
+
+# SQLite 데이터베이스 경로
+database:
+  path: "data/neet_articles.db"
+
+# AI 분석 설정 (OpenAI)
+ai:
+  model: "gpt-4o-mini"  # 환경변수 OPENAI_MODEL로 덮어쓸 수 있음
+  enabled: true         # false로 설정하면 API 키가 있어도 AI 분석 건너뜀
+
+# 내보내기 기본값
+export:
+  default_csv: "data/articles.csv"
+  default_json: "data/articles.json"

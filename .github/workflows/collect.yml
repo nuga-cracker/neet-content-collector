@@ -1,0 +1,94 @@
+name: Collect NEET Articles
+
+on:
+  schedule:
+    # 매일 한국시간 오전 9시 (UTC 00:00) 실행
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+    inputs:
+      no_ai:
+        description: "AI 분석 건너뛰기"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+
+jobs:
+  collect:
+    name: Collect and Export
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Run collector
+        env:
+          # OPENAI_API_KEY가 없으면 AI 분석을 자동으로 건너뜁니다
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          NEET_DB_PATH: data/neet_articles.db
+        run: |
+          mkdir -p data
+          NO_AI_FLAG=""
+          if [ "${{ github.event.inputs.no_ai }}" = "true" ]; then
+            NO_AI_FLAG="--no-ai"
+          fi
+          python -m neet_collector collect $NO_AI_FLAG
+
+      - name: Export to CSV and JSON
+        run: |
+          python -m neet_collector export --format csv --output data/articles.csv
+          python -m neet_collector export --format json --output data/articles.json
+
+      - name: Show stats
+        run: python -m neet_collector stats
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: neet-articles-${{ github.run_id }}
+          path: |
+            data/neet_articles.db
+            data/articles.csv
+            data/articles.json
+          retention-days: 30
+
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Run pytest
+        run: pytest tests/ -v --tb=short
