@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.venv/
+venv/
+env/
+
+# 환경 변수 (비밀 키 포함 가능 – 절대 커밋하지 마세요)
+.env
+
+# 데이터 파일
+data/*.db
+data/*.csv
+data/*.json
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 테스트 및 커버리지
+.pytest_cache/
+.coverage
+htmlcov/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 임시 파일
+*.tmp
+*.log
