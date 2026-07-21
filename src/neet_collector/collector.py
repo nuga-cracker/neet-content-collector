@@ -146,7 +146,6 @@ def collect_feed(
                 logger.debug("관련도 미달 스킵 (%d): %s", rel_score, title)
                 continue
 
-            norm_url = url
             u_hash = url_hash(url)
             c_hash = content_hash(title, body)
 
@@ -157,7 +156,7 @@ def collect_feed(
 
             article = Article(
                 title=title,
-                url=norm_url,
+                url=url,
                 source=_source_from_feed(feed_config, entry),
                 published_at=_parse_date(entry),
                 body=body,

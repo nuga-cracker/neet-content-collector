@@ -50,7 +50,7 @@ def analyze(title: str, body: str, model: str = "gpt-4o-mini") -> Optional[dict]
     if client is None:
         return None
 
-    user_content = f"제목: {title}\n\n본문:\n{body[:1500]}"
+    user_content = f"제목: {title}\n\n본문:\n{body[:1500]}"  # AI 비용 절감을 위해 2000자 미만으로 제한
 
     try:
         response = client.chat.completions.create(

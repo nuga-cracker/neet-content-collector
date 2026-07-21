@@ -5,7 +5,7 @@ from __future__ import annotations
 import sqlite3
 from contextlib import contextmanager
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Generator, Optional
 
@@ -20,7 +20,7 @@ class Article:
     published_at: Optional[str] = None
     body: str = ""
     image_url: Optional[str] = None
-    collected_at: str = field(default_factory=lambda: datetime.utcnow().isoformat())
+    collected_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     relevance_score: int = 0
     # AI 분석 결과 (선택)
     ai_summary: Optional[str] = None
